@@ -1,0 +1,19 @@
+clear all
+%短时自相关
+[x,Fs]=audioread('filename');       % 读入数据文件
+xs=x(:,1);
+wlen=700;sp=1.535*44100;
+
+y=xs(sp:sp+wlen-1);
+y=y.*boxcar(wlen);
+R=zeros(1,wlen);
+for k=1:wlen
+    for n=1:wlen-k
+        R(k)=R(k)+x(n)*x(n+k);
+    end
+end
+
+figure;
+j=1:wlen;
+plot(j,R);
+title('短时自相关函数');
