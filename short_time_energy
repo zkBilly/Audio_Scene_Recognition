@@ -1,6 +1,6 @@
 clear all
 % 短时能量
-[x,Fs]=audioread('C:\Users\Billy\Desktop\毕业设计\素材\北国风光.mp3');       % 读入数据文件
+[x,Fs]=audioread('filename');       % 读入数据文件
 xs=x(:,1);
 
 wlen=0.05*Fs; inc=0.05*Fs;          % 给出帧长和帧移
