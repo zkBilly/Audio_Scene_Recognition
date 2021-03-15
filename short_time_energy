@@ -1,0 +1,23 @@
+clear all
+% 短时能量
+[x,Fs]=audioread('C:\Users\Billy\Desktop\毕业设计\素材\北国风光.mp3');       % 读入数据文件
+xs=x(:,1);
+
+wlen=0.05*Fs; inc=0.05*Fs;          % 给出帧长和帧移
+win=hanning(wlen);         % 给出汉宁窗
+N=length(xs);               % 信号长度
+X=enframe(xs,win,inc)';     % 分帧
+fn=size(X,2);              % 求出帧数
+time=(0:N-1)/Fs;           % 计算出信号的时间刻度
+for i=1:fn
+    u=X(:,i);              % 取出一帧
+    u2=u.*u;               % 求出能量
+    E(i)=sum(u2);         % 对一帧累加求和
+end
+subplot 211; plot(time,xs); % 画出时间波形 
+title('音乐波形');
+ylabel('幅值'); xlabel('时间/s');
+frameTime=frame2time(fn,wlen,inc,Fs);   % 求出每帧对应的时间
+subplot 212; plot(frameTime,E)     % 画出短时能量图
+title('短时能量');
+ylabel('幅值'); xlabel('时间/s');
