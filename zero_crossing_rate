@@ -1,0 +1,28 @@
+clear all
+%短时平均过零率
+[x,Fs]=audioread('filename');       % 读入数据文件
+xs=x(:,1);
+x=xs-mean(xs);                    % 消除直流分量
+wlen=0.05*Fs; inc=0.05*Fs;                 % 设置帧长、帧移
+win=hanning(wlen);                % 窗函数
+N=length(x);                      % 求数据长度
+X=enframe(x,win,inc)';            % 分帧
+fn=size(X,2);                     % 获取帧数
+zcr1=zeros(1,fn);                 % 初始化
+for i=1:fn
+    z=X(:,i);                     % 取得一帧数据
+    for j=1: (wlen- 1)            % 在一帧内寻找过零点
+         if z(j)* z(j+1)< 0       % 判断是否为过零点
+             zcr1(i)=zcr1(i)+1;   % 是过零点，记录1次
+         end
+    end
+end
+time=(0:N-1)/Fs;                  % 计算时间坐标
+frameTime=frame2time(fn,wlen,inc,Fs);  % 求出每帧对应的时间
+% 作图
+subplot 211; plot(time,xs); grid;
+title('音乐波形');
+ylabel('幅值'); xlabel('时间/s');
+subplot 212; plot(frameTime,zcr1); grid;
+title('短时平均过零率');
+ylabel('幅值'); xlabel('时间/s');
